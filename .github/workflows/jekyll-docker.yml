@@ -20,7 +20,7 @@ jobs:
       run: |
           docker run \
           -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-          jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future"
+          jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future && grep -R "href=\"/" ./_site | cut -f"1" -d":" | uniq | xargs sed -i  's|href="/|href="/${{ env.targetdir }}/|'"
     - name: Deploy preview
       uses: rossjrw/pr-preview-action@v1
       with:
